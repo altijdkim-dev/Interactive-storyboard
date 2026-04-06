@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Image Halves Display</title>
+<style>
+body {
+    margin: 0;
+    padding: 20px;
+    font-family: sans-serif;
+    background: #eee;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Container om alleen het helft van de afbeelding te tonen, nu groter */
+#story-container {
+    width: 800px; /* grotere breedte */
+    height: 600px; /* grotere hoogte */
+    overflow: hidden; /* verberg de overflow */
+    margin-bottom: 20px;
+    cursor: pointer;
+    position: relative;
+}
+
+/* Inner wrapper voor de afbeelding, positie relatief voor verschuiving */
+.inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+/* Afbeeldingen stijl */
+.inner img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.3s ease;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* Klasse voor verschuiven naar de onderste helft */
+.bottom-half {
+    transform: translateY(-600px);
+}
+</style>
+</head>
+<body>
+<div id="story-container">
+  <div class="inner" id="image-wrapper"></div>
+</div>
+
+<script>
+const logicStates = {
+    "image1_top": { img: "images/Ontwerp_Mislabel_Diagnoses_DAC.png", half: "top" },
+    "image1_bottom": { img: "images/Ontwerp_Mislabel_Diagnoses_DAC.png", half: "bottom" },
+    "image2_top": { img: "images/Ontwerp_Mislabel_Diagnoses_DAC2.png", half: "top" },
+    "image2_bottom": { img: "images/Ontwerp_Mislabel_Diagnoses_DAC2.png", half: "bottom" },
+    "image3_top": { img: "images/Ontwerp_Mislabel_Diagnoses_DAC3.png", half: "top" },
+    "image3_bottom": { img: "images/Ontwerp_Mislabel_Diagnoses_DAC3.png", half: "bottom" },
+    "image3_1": { img: "images/Ontwerp_Mislabel_Diagnoses_DAC3.1.png", half: "full" },
+    "image4_top": { img: "images/Ontwerp_Mislabel_Diagnoses_DAC4.png", half: "top" },
+    "image4_bottom": { img: "images/Ontwerp_Mislabel_Diagnoses_DAC4.png", half: "bottom" },
+    "image5_top": { img: "images/Ontwerp_Mislabel_Diagnoses_DAC5.png", half: "top" },
+    "image5_bottom": { img: "images/Ontwerp_Mislabel_Diagnoses_DAC5.png", half: "bottom" },
+    "image6_top": { img: "images/Ontwerp_Mislabel_Diagnoses_DAC6.png", half: "top" },
+    "image6_1_top": { img: "images/Ontwerp_Mislabel_Diagnoses_DAC6.1.png", half: "top" },
+    "image6_1_bottom": { img: "images/Ontwerp_Mislabel_Diagnoses_DAC6.1.png", half: "bottom" },
+    "image6_2_top": { img: "images/Ontwerp_Mislabel_Diagnoses_DAC6.2.png", half: "top" },
+    "image6_2_bottom": { img: "images/Ontwerp_Mislabel_Diagnoses_DAC6.2.png", half: "bottom" },
+    "image7_top": { img: "images/Ontwerp_Mislabel_Diagnoses_DAC7.png", half: "top" },
+    "image7_bottom": { img: "images/Ontwerp_Mislabel_Diagnoses_DAC7.png", half: "bottom" },
+    "image8_top": { img: "images/Ontwerp_Mislabel_Diagnoses_DAC8.png", half: "top" },
+    "image8_bottom": { img: "images/Ontwerp_Mislabel_Diagnoses_DAC8.png", half: "bottom" },
+    "image9_top": { img: "images/Ontwerp_Mislabel_Diagnoses_DAC9.png", half: "top" }
+};
+
+let currentScene = "image1_top";
+const wrapper = document.getElementById('image-wrapper');
+
+function renderScene() {
+    wrapper.innerHTML = ''; // Maak leeg
+    const state = logicStates[currentScene];
+
+    if (!state) {
+        // Geen scène meer, stoppen
+        alert("Einde van de scènes.");
+        return;
+    }
+
+    const img = document.createElement('img');
+    img.src = state.img;
+
+    // Plaats de juiste klasse voor bottom helft
+    if (state.half === 'bottom') {
+        img.className='bottom-half';
+    } else {
+        img.className=''; // standaard
+    }
+
+    wrapper.appendChild(img);
+
+    // Klik event om naar de volgende scène te gaan
+    wrapper.onclick = () => {
+        const nextScene = getNextScene(currentScene);
+        if (nextScene) {
+            currentScene = nextScene;
+            renderScene();
+        } else {
+            alert("Einde van de scènes.");
+        }
+    };
+}
+
+function getNextScene(current) {
+    const keys = Object.keys(logicStates);
+    const index = keys.indexOf(current);
+    for (let i = index + 1; i < keys.length; i++) {
+        if (keys[i].startsWith('image')) {
+            return keys[i];
+        }
+    }
+    return null; // geen verdere scènes
+}
+
+renderScene();
+</script>
+</body>
+</html>
